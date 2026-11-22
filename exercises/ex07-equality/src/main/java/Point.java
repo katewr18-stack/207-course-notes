@@ -46,8 +46,8 @@ public class Point {
    */
   @Override
   public String toString() {
-    // TODO
-    return "";
+    String return_str = "(" + this.x + ", " + this.y + ")";
+    return return_str;
   }
 
   /**
@@ -58,9 +58,19 @@ public class Point {
    */
   @Override
   public boolean equals(Object o) {
-    // TODO: check that o is a Point (use `instanceof`), cast it, and compare
-    //       the x and y fields.
-    return false;
+    if (o instanceof Point){
+      Point o_as_point = (Point) o; // I want to treat o as a point, not an object, so I'll cast it as such
+      if (o_as_point.x != this.x){
+        return false; // if the x's aren't the same they aren't the same point
+      }
+      // Here we know that the x's are the same
+      if (o_as_point.y != this.y){
+        return false;
+      }
+      // if neither case is true then it is the same point, so return true
+      return true;
+    }
+    return false; // If the object is not a point
   }
 
   /**
@@ -71,7 +81,6 @@ public class Point {
    */
   @Override
   public int hashCode() {
-    // TODO: Objects.hash(x, y) is an easy way to combine the fields.
-    return 0;
+    return Objects.hash(this.x, this.y);
   }
 }
