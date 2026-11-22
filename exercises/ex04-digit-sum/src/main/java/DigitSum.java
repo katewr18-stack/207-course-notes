@@ -21,7 +21,24 @@ public class DigitSum {
      * @return the sum of its decimal digits
      */
     public static int digitSum(int n) {
-        // TODO: complete
-        return 0;
+        // treat the value as an absolute value
+        if (n < 0) {
+            n = n * -1;
+        }
+
+        int sum = 0;
+        while (n > 0 ) {
+            // the ones place value
+            int ones_place = n % 10;
+
+            // add the value to the sum
+            sum += ones_place;
+
+            // remove the ones place value from n
+            n = n / 10;
+
+        }
+
+        return sum;
     }
 }
