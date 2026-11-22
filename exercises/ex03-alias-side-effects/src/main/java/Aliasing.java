@@ -1,4 +1,3 @@
-package main.java;
 
 import java.util.Arrays;
 
@@ -41,7 +40,9 @@ public class Aliasing {
      * @param amount the value to add to each element
      */
     public static void addInPlace(int[] arr, int amount) {
-        // TODO: complete
+        for (int i = 0; i < arr.length; i +=1){
+            arr[i] += amount;
+        }
     }
 
     /**
@@ -53,7 +54,11 @@ public class Aliasing {
      * @return a new array of the same length, each element increased by amount
      */
     public static int[] addCopy(int[] arr, int amount) {
-        // TODO: complete
-        return new int[1];
+        int[] copy_arr = new int[arr.length];
+        for (int i = 0; i < arr.length; i +=1){
+            int added_num = arr[i] + amount;
+            copy_arr[i] = added_num;
+        }
+        return copy_arr;
     }
 }
