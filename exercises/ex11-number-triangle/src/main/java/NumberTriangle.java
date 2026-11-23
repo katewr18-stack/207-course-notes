@@ -1,3 +1,4 @@
+import java.awt.font.NumericShaper;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -103,13 +104,32 @@ public class NumberTriangle {
    * @return the root value at the location indicated by path
    */
   public int retrieve(String path) {
-    // TODO: walk the path one character at a time, starting from this object.
-    //       For each character, move to the left child (if it is 'l') or the
-    //       right child (if it is 'r'). When the path runs out, return the root
-    //       value of wherever you ended up. An empty path means "stay here".
-    //       Hint: String#charAt(int) and String#length() are all you need for the
-    //       iterative version; a recursive version can use String#substring(1).
-    return 0;
+
+    // if the string is empty, return the root of this triangle
+    if (path.isEmpty()) {
+      return this.root;
+    }
+
+    // if the current NumberTriangle does not have any children, return the root
+    if (this.isLeaf()) {
+      return this.root;
+    }
+
+    // otherwise, the path is not empty, so we can start to walk it
+    char direction = path.charAt(0);
+    if (direction == 'l'){
+      if (this.left == null) {
+        return this.root; //this means that there is no left child for us to move to, so return this value
+      }
+      // otherwise, recursively call this feature
+      return this.left.retrieve(path.substring(1));
+    }
+
+    // the path is not empty and does not say to go left, so it must say to go right
+    if (this.right == null){
+      return this.root; //same logic as above
+    }
+    return this.right.retrieve(path.substring(1));
   }
 
   /**
@@ -167,9 +187,9 @@ public class NumberTriangle {
     // of the "APIs, JSON, and Files" chapter.
     BufferedReader br = Files.newBufferedReader(Path.of(fname));
 
-    // TODO: define any variables that you want to use to keep track of things
-    //       between iterations of the loop below (for example, the row of
-    //       NumberTriangle objects that you built on the previous iteration).
+    // Keeping track of the last row
+    NumberTriangle[] prev_row = null;
+
 
     // We need to return the top of the NumberTriangle, so here is a variable for it.
     NumberTriangle top = null;
@@ -185,6 +205,35 @@ public class NumberTriangle {
       //       this row; make a NumberTriangle for each one, then wire this row up
       //       as the children of the previous row. Remember the aliasing: the
       //       right child of one node is the left child of the next node over.
+      // First, I am going to check if the previous row is empty, if that is the case this is the top
+      if (prev_row == null){
+        top = new NumberTriangle(Integer.parseInt(line));
+        prev_row = new NumberTriangle[] {top};
+
+      }
+      else{
+        String[] numbers_as_string = line.split(" ");
+
+        // Making a current row for the number triangle
+        NumberTriangle[] current_row = new NumberTriangle[numbers_as_string.length];
+
+        // Now I am adding a current row
+        for (int i = 0; i < numbers_as_string.length; i += 1){
+          int temp_root = Integer.parseInt(numbers_as_string[i]); //Convert the string of the integer to an int
+          NumberTriangle childless = new NumberTriangle(temp_root);
+          current_row[i] = childless;
+        }
+
+        // Connect the rows
+        for (int i = 0; i < prev_row.length; i += 1) {
+          prev_row[i].setLeft(current_row[i]);
+          prev_row[i].setRight(current_row[i + 1]);
+        }
+
+        prev_row = current_row;
+
+      }
+
 
       // read the next line
       line = br.readLine();
